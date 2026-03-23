@@ -98,7 +98,6 @@ yes | ant -Dplatform.macos=true \
   -Dbuild.type=release/$LWJGL_VERSION \
   -Djavadoc.skip=true \
   -Dnashorn.args="--no-deprecation-warning" \
-  -Djdk21=true \
   compile compile-native release
 
 # Copy native libraries
