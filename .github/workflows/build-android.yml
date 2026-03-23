@@ -63,6 +63,12 @@ jobs:
         BUILD_STATUS=${PIPESTATUS[0]}
         set -e
         if [ "$BUILD_STATUS" -ne 0 ]; then
+          TAIL_LOG="$(tail -n 60 android-build-${{matrix.arch}}.log | sed ':a;N;$!ba;s/\n/ | /g')"
+          # Escape GitHub workflow command characters.
+          TAIL_LOG="${TAIL_LOG//'%'/'%25'}"
+          TAIL_LOG="${TAIL_LOG//$'\r'/'%0D'}"
+          TAIL_LOG="${TAIL_LOG//$'\n'/'%0A'}"
+          echo "::error title=Android build failed (${{matrix.arch}})::${TAIL_LOG}"
           {
             echo "## Android build failed (${{matrix.arch}})"
             echo ""
