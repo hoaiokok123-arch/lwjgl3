@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 export LIBFFI_VERSION=3.4.6
-export LWJGL_BUILD_OFFLINE=1
 export LWJGL_BUILD_ARCH=arm64
 SOURCE_LWJGL_VERSION="$(grep -m1 '^lwjglVersion=' gradle.properties | cut -d'=' -f2)"
 LWJGL_VERSION="${LWJGL_VERSION:-$SOURCE_LWJGL_VERSION}"

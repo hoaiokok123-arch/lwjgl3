@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export LIBFFI_VERSION=3.4.6
-export ANDROID=1 LWJGL_BUILD_OFFLINE=1
+export ANDROID=1
 SOURCE_LWJGL_VERSION="$(grep -m1 '^lwjglVersion=' gradle.properties | cut -d'=' -f2)"
 LWJGL_VERSION="${LWJGL_VERSION:-$SOURCE_LWJGL_VERSION}"
 if [ -z "$LWJGL_VERSION" ]; then
@@ -45,7 +45,7 @@ if [ "$SKIP_LIBFFI" != "1" ]; then
   cd libffi
 
   # Build libffi
-  bash configure --host=$TARGET --prefix=$PWD/$NDK_TARGET-unknown-linux-android$NDK_SUFFIX CC=${TARGET}21-clang CXX=${TARGET}21-clang++
+  bash configure --host=$TARGET --prefix=$PWD/$NDK_TARGET-unknown-linux-android$NDK_SUFFIX CC=${TARGET}21-clang CXX=${TARGET}21-clang++ --disable-multi-os-directory
   make -j4
   cd ..
 
@@ -55,7 +55,7 @@ fi
 
 if [ "$SKIP_FREETYPE" != "1" ]; then
   #!/bin/bash
-  export BUILD_FREETYPE_VERSION=2.13.2
+  export BUILD_FREETYPE_VERSION=2.13.3
   wget https://downloads.sourceforge.net/project/freetype/freetype2/$BUILD_FREETYPE_VERSION/freetype-$BUILD_FREETYPE_VERSION.tar.gz
   tar xf freetype-$BUILD_FREETYPE_VERSION.tar.gz
   rm  freetype-$BUILD_FREETYPE_VERSION.tar.gz
@@ -86,7 +86,7 @@ if [ "$SKIP_FREETYPE" != "1" ]; then
 fi
 
 # Download libraries
-POJAV_NATIVES="https://github.com/AngelAuraMC/Amethyst-Android/raw/v3_openjdk/app_pojavlauncher/src/main/jniLibs/$NDK_ABI"
+POJAV_NATIVES="https://github.com/AngelAuraMC/Amethyst-Android/raw/34fe895c4d6117b50dd19a69819cd5430de6fc06/app_pojavlauncher/src/main/jniLibs/$NDK_ABI"
 wget -nc $POJAV_NATIVES/libopenal.so -P $LWJGL_NATIVE/openal
 wget -nc "https://github.com/AngelAuraMC/shaderc/releases/latest/download/libshaderc-$NDK_ABI.zip"
 unzip -o libshaderc-$NDK_ABI.zip -d $LWJGL_NATIVE/shaderc
@@ -100,6 +100,7 @@ ant -version
 # Needed to download deps like kotlinc. Has to run first else jspecify fails
 # to compile Kotlin properly and missing annotations cause compile errors.
 yes | ant init
+export LWJGL_BUILD_OFFLINE=true
 yes | ant -Dplatform.linux=true \
   -Dbinding.assimp=false \
   -Dbinding.bgfx=false \
