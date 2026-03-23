@@ -25,9 +25,19 @@ export JAVA8_HOME=/path/to/java8
 bash ci_build_android.bash
 ```
 
+Optional environment variables:
+
+- `LWJGL_VERSION=3.4.1` chooses the Ant release folder suffix (`release/<version>`).
+- `ALLOW_VERSION_MISMATCH=1` bypasses source-version guard (not recommended for production).
+
 #### iOS
 
 Just run `bash ci_build_ios.bash` on macOS
+
+Optional environment variables:
+
+- `LWJGL_VERSION=3.4.1` chooses the Ant release folder suffix (`release/<version>`).
+- `ALLOW_VERSION_MISMATCH=1` bypasses source-version guard (not recommended for production).
 
 ---
 

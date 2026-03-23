@@ -3,6 +3,17 @@ set -e
 export LIBFFI_VERSION=3.4.6
 export LWJGL_BUILD_OFFLINE=1
 export LWJGL_BUILD_ARCH=arm64
+SOURCE_LWJGL_VERSION="$(grep -m1 '^lwjglVersion=' gradle.properties | cut -d'=' -f2)"
+LWJGL_VERSION="${LWJGL_VERSION:-$SOURCE_LWJGL_VERSION}"
+if [ -z "$LWJGL_VERSION" ]; then
+  echo "Error: failed to resolve LWJGL_VERSION"
+  exit 1
+fi
+if [ "$LWJGL_VERSION" != "$SOURCE_LWJGL_VERSION" ] && [ "${ALLOW_VERSION_MISMATCH:-0}" != "1" ]; then
+  echo "Error: requested LWJGL_VERSION=$LWJGL_VERSION but source is $SOURCE_LWJGL_VERSION."
+  echo "       Rebase source to matching version, or set ALLOW_VERSION_MISMATCH=1 to force."
+  exit 1
+fi
 
 LWJGL_NATIVE=bin/libs/native/macos/$LWJGL_BUILD_ARCH/org/lwjgl
 mkdir -p $LWJGL_NATIVE
@@ -49,6 +60,8 @@ touch bin/classes/{generator,templates}/touch.txt bin/classes/generator/generate
 
 # Build LWJGL 3
 ant -version
+# Needed to download deps (e.g. kotlinc/jspecify) before compile.
+yes | ant init
 yes | ant -Dplatform.macos=true \
   -Dbinding.assimp=false \
   -Dbinding.bgfx=false \
@@ -83,9 +96,10 @@ yes | ant -Dplatform.macos=true \
   -Dbinding.xxhash=false \
   -Dbinding.yoga=false \
   -Dbinding.zstd=false \
-  -Dbuild.type=release/3.3.3 \
+  -Dbuild.type=release/$LWJGL_VERSION \
   -Djavadoc.skip=true \
   -Dnashorn.args="--no-deprecation-warning" \
+  -Djdk21=true \
   compile compile-native release
 
 # Copy native libraries

@@ -1,6 +1,17 @@
 name: Android build
 
-on: [workflow_dispatch, push]
+on:
+  workflow_dispatch:
+    inputs:
+      lwjgl_version:
+        description: "LWJGL version to package (e.g. 3.4.1). Must match source unless ALLOW_VERSION_MISMATCH=1."
+        required: false
+        default: "3.3.3"
+      allow_version_mismatch:
+        description: "Set to 1 to force build.type with lwjgl_version even when source version differs."
+        required: false
+        default: "0"
+  push:
 
 jobs:
   build:
@@ -15,15 +26,19 @@ jobs:
       uses: actions/checkout@v2
 
     - name: set up JDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v5
       with:
         distribution: temurin
-        java-version: 8
+        java-version: |
+            8
+            21
 
     - name: Build for Android ${{matrix.arch}}
       run: |
         export JAVA8_HOME=$JAVA_HOME_8_${{runner.arch}}
         export LWJGL_BUILD_ARCH=${{matrix.arch}}
+        export LWJGL_VERSION="${{ github.event.inputs.lwjgl_version }}"
+        export ALLOW_VERSION_MISMATCH="${{ github.event.inputs.allow_version_mismatch }}"
         bash ci_build_android.bash
 
     - name: Upload modules release output
