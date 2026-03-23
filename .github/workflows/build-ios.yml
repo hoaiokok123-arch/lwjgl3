@@ -56,7 +56,22 @@ jobs:
 
         export ALLOW_VERSION_MISMATCH="${{ github.event.inputs.allow_version_mismatch }}"
         echo "Building LWJGL_VERSION=$LWJGL_VERSION with JAVA_HOME=$JAVA_HOME"
-        bash ci_build_ios.bash
+        set +e
+        bash ci_build_ios.bash 2>&1 | tee ios-build.log
+        BUILD_STATUS=${PIPESTATUS[0]}
+        set -e
+        if [ "$BUILD_STATUS" -ne 0 ]; then
+          {
+            echo "## iOS build failed"
+            echo ""
+            echo "Last 120 lines of ci_build_ios.bash output:"
+            echo ""
+            echo '```text'
+            tail -n 120 ios-build.log || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$BUILD_STATUS"
+        fi
 
     - name: Upload modules release output
       uses: actions/upload-artifact@v4
@@ -69,3 +84,10 @@ jobs:
       with:
         name: lwjgl3-ios-natives
         path: bin/out
+
+    - name: Upload iOS build log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: lwjgl3-ios-build-log
+        path: ios-build.log
