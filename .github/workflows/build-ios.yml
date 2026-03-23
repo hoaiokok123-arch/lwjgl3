@@ -6,7 +6,7 @@ on:
       lwjgl_version:
         description: "LWJGL version to package (e.g. 3.4.1). Must match source unless ALLOW_VERSION_MISMATCH=1."
         required: false
-        default: "3.3.3"
+        default: "3.4.1"
       allow_version_mismatch:
         description: "Set to 1 to force build.type with lwjgl_version even when source version differs."
         required: false
