@@ -231,6 +231,11 @@ JNIEXPORT jint JNICALL Java_org_lwjgl_system_libffi_LibFFI_nffi_1get_1struct_1of
     return (jint)ffi_get_struct_offsets((ffi_abi)abi, struct_type, offsets);
 }
 
+JNIEXPORT jlong JNICALL Java_org_lwjgl_system_libffi_LibFFI_ffi_1get_1closure_1size(JNIEnv *__env, jclass clazz) {
+    UNUSED_PARAMS(__env, clazz)
+    return (jlong)sizeof(ffi_closure);
+}
+
 JNIEXPORT jlong JNICALL Java_org_lwjgl_system_libffi_LibFFI_nffi_1closure_1alloc(JNIEnv *__env, jclass clazz, jlong size, jlong codeAddress) {
     void **code = (void **)(uintptr_t)codeAddress;
     UNUSED_PARAMS(__env, clazz)

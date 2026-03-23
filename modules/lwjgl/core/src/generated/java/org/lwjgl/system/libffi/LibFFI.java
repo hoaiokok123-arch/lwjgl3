@@ -576,6 +576,14 @@ public class LibFFI {
         return nffi_get_struct_offsets(abi, struct_type.address(), memAddressSafe(offsets));
     }
 
+    // --- [ ffi_get_closure_size ] ---
+
+    /**
+     * Returns the size of {@code ffi_closure}.
+     */
+    @NativeType("size_t")
+    public static native long ffi_get_closure_size();
+
     // --- [ ffi_closure_alloc ] ---
 
     /** Unsafe version of: {@link #ffi_closure_alloc closure_alloc} */

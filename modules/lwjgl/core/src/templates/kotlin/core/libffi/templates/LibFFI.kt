@@ -257,6 +257,13 @@ typedef void (*FFI_CLOSURE_FUN)(ffi_cif*, void*, void**, void*);""")
         """
     )
 
+    size_t(
+        "get_closure_size",
+        "Returns the size of {@code ffi_closure}.",
+
+        void()
+    )
+
     ffi_closure.p(
         "closure_alloc",
         """
