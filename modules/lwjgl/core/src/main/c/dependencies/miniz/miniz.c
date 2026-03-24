@@ -3186,6 +3186,22 @@ static int mz_stat64(const char *path, struct __stat64 *buffer)
 #define MZ_FREOPEN(p, m, s) freopen64(p, m, s)
 #define MZ_DELETE_FILE remove
 
+#elif defined(__ANDROID__)
+#ifndef MINIZ_NO_TIME
+#include <utime.h>
+#endif
+#define MZ_FOPEN(f, m) fopen(f, m)
+#define MZ_FCLOSE fclose
+#define MZ_FREAD fread
+#define MZ_FWRITE fwrite
+#define MZ_FTELL64 ftell
+#define MZ_FSEEK64 fseek
+#define MZ_FILE_STAT_STRUCT stat
+#define MZ_FILE_STAT stat
+#define MZ_FFLUSH fflush
+#define MZ_FREOPEN(p, m, s) freopen(p, m, s)
+#define MZ_DELETE_FILE remove
+
 #elif defined(__APPLE__) || defined(__FreeBSD__)
 #ifndef MINIZ_NO_TIME
 #include <utime.h>

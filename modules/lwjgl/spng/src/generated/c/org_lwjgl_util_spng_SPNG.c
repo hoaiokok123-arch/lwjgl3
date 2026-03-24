@@ -7,7 +7,11 @@
 
 #define SPNG_STATIC
 #define SPNG_USE_MINIZ
-#define SPNG_SSE 4
+#if defined(LWJGL_x86)
+    #define SPNG_SSE 2
+#else
+    #define SPNG_SSE 4
+#endif
 
 #include "spng.c"
 
