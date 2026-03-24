@@ -238,17 +238,17 @@ JNIEXPORT jlong JNICALL Java_org_lwjgl_system_libffi_LibFFI_nffi_1type_1pointer(
 
 JNIEXPORT jlong JNICALL Java_org_lwjgl_system_libffi_LibFFI_nffi_1get_1version(JNIEnv *__env, jclass clazz) {
     UNUSED_PARAMS(__env, clazz)
-    return (jlong)(uintptr_t)ffi_get_version();
+    return (jlong)(uintptr_t)"3.5.0";
 }
 
 JNIEXPORT jlong JNICALL Java_org_lwjgl_system_libffi_LibFFI_ffi_1get_1version_1number(JNIEnv *__env, jclass clazz) {
     UNUSED_PARAMS(__env, clazz)
-    return (jlong)ffi_get_version_number();
+    return (jlong)30500UL;
 }
 
 JNIEXPORT jint JNICALL Java_org_lwjgl_system_libffi_LibFFI_ffi_1get_1default_1abi(JNIEnv *__env, jclass clazz) {
     UNUSED_PARAMS(__env, clazz)
-    return (jint)ffi_get_default_abi();
+    return (jint)FFI_DEFAULT_ABI;
 }
 
 JNIEXPORT jint JNICALL Java_org_lwjgl_system_libffi_LibFFI_nffi_1prep_1cif(JNIEnv *__env, jclass clazz, jlong cifAddress, jint abi, jint nargs, jlong rtypeAddress, jlong atypesAddress) {

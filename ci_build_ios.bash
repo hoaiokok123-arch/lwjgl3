@@ -34,6 +34,12 @@ if [ "$SKIP_LIBFFI" != "1" ]; then
   # Generate configure file
   python3 generate-darwin-source-and-headers.py --only-ios
 
+  # Xcode project still copies armv7 headers in libffi-iOS target.
+  # For arm64-only builds, provide a compatible placeholder to keep the target buildable.
+  if [ ! -f darwin_ios/include/ffitarget_armv7.h ] && [ -f darwin_ios/include/ffitarget_arm64.h ]; then
+    cp darwin_ios/include/ffitarget_arm64.h darwin_ios/include/ffitarget_armv7.h
+  fi
+
   # Restore generator
   mv generate-darwin-source-and-headers.py.bak generate-darwin-source-and-headers.py
 
